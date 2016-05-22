@@ -37,17 +37,19 @@
 
  Author: Blaise Gassend
 
- Handles synchronizing node state with the configuration server, and 
+ Handles synchronizing node state with the configuration server, and
  handling of services to get and set configuration.
 
 */
 
-#ifndef __SERVER_H__
-#define __SERVER_H__
+#ifndef __DYNAMIC_RECONFIGURE__SERVER_H__
+#define __DYNAMIC_RECONFIGURE__SERVER_H__
 
 #include <boost/function.hpp>
 #include <boost/thread/recursive_mutex.hpp>
+#include <pluginlib/class_loader.h>
 #include <ros/node_handle.h>
+#include <dynamic_reconfigure/base_storage.h>
 #include <dynamic_reconfigure/ConfigDescription.h>
 #include <dynamic_reconfigure/Reconfigure.h>
 
@@ -60,12 +62,13 @@ namespace dynamic_reconfigure
 /**
  * Keeps track of the reconfigure callback function.
  */
-template <class ConfigType>  
+template <class ConfigType>
 class Server
 {
 public:
   Server(const ros::NodeHandle &nh = ros::NodeHandle("~")) :
     node_handle_(nh),
+    bs_loader_("dynamic_reconfigure", "dynamic_reconfigure::BaseStorage"),
     mutex_(own_mutex_),
     own_mutex_warn_(true)
   {
@@ -74,14 +77,19 @@ public:
 
   Server(boost::recursive_mutex &mutex, const ros::NodeHandle &nh = ros::NodeHandle("~")) :
     node_handle_(nh),
+    bs_loader_("dynamic_reconfigure", "dynamic_reconfigure::BaseStorage"),
     mutex_(mutex),
     own_mutex_warn_(false)
   {
     init();
   }
 
+  ~Server() {
+    storage_.reset();
+  }
+
   typedef boost::function<void(ConfigType &, uint32_t level)> CallbackType;
-  
+
   void setCallback(const CallbackType &callback)
   {
     boost::recursive_mutex::scoped_lock lock(mutex_);
@@ -146,6 +154,10 @@ private:
   ros::ServiceServer set_service_;
   ros::Publisher update_pub_;
   ros::Publisher descr_pub_;
+
+  boost::shared_ptr<dynamic_reconfigure::BaseStorage> storage_;
+  pluginlib::ClassLoader<dynamic_reconfigure::BaseStorage> bs_loader_;
+
   CallbackType callback_;
   ConfigType config_;
   ConfigType min_;
@@ -163,9 +175,9 @@ private:
     //Copy over min_ max_ default_
     dynamic_reconfigure::ConfigDescription description_message = ConfigType::__getDescriptionMessage__();
 
-    max_.__toMessage__(description_message.max, ConfigType::__getParamDescriptions__(),ConfigType::__getGroupDescriptions__());
-    min_.__toMessage__(description_message.min,ConfigType::__getParamDescriptions__(),ConfigType::__getGroupDescriptions__());
-    default_.__toMessage__(description_message.dflt,ConfigType::__getParamDescriptions__(),ConfigType::__getGroupDescriptions__());
+    max_.__toMessage__(description_message.max, ConfigType::__getParamDescriptions__(), ConfigType::__getGroupDescriptions__());
+    min_.__toMessage__(description_message.min, ConfigType::__getParamDescriptions__(), ConfigType::__getGroupDescriptions__());
+    default_.__toMessage__(description_message.dflt, ConfigType::__getParamDescriptions__(), ConfigType::__getGroupDescriptions__());
 
     //Publish description
     descr_pub_.publish(description_message);
@@ -180,14 +192,57 @@ private:
 
     boost::recursive_mutex::scoped_lock lock(mutex_);
     set_service_ = node_handle_.advertiseService("set_parameters",
-        &Server<ConfigType>::setConfigCallback, this);
-    
+                   &Server<ConfigType>::setConfigCallback, this);
+
     descr_pub_ = node_handle_.advertise<dynamic_reconfigure::ConfigDescription>("parameter_descriptions", 1, true);
     descr_pub_.publish(ConfigType::__getDescriptionMessage__());
-    
+
     update_pub_ = node_handle_.advertise<dynamic_reconfigure::Config>("parameter_updates", 1, true);
+
+    // initialize storage
+    std::string key;
+    std::string storage_backend;
+    std::string storage_url;
+    bool storage_reset = false;
+
+    if (node_handle_.searchParam("dynamic_reconfigure_storage_backend", key))
+    {
+      node_handle_.getParam(key, storage_backend);
+    }
+    if (node_handle_.searchParam("dynamic_reconfigure_storage_url", key))
+    {
+      node_handle_.getParam(key, storage_url);
+    }
+    if (node_handle_.searchParam("dynamic_reconfigure_storage_reset", key))
+    {
+      node_handle_.getParam(key, storage_reset);
+    }
+
+    if (!storage_backend.empty())
+    {
+      try
+      {
+        storage_ = bs_loader_.createInstance(storage_backend);
+        storage_->initialize(ros::this_node::getName(), storage_url);
+      }
+      catch (const pluginlib::PluginlibException& ex)
+      {
+        ROS_ERROR("Failed to create the %s storage backend, are you sure it is properly registered and that the containing library is built? Exception: %s", storage_backend.c_str(), ex.what());
+      }
+    }
+
+    // initialize config
     ConfigType init_config = ConfigType::__getDefault__();
     init_config.__fromServer__(node_handle_);
+
+    if (storage_ && !storage_reset)
+    {
+      dynamic_reconfigure::Config msg;
+      init_config.__toMessage__(msg);
+      storage_->loadConfig(msg);
+      init_config.__fromMessage__(msg);
+    }
+
     init_config.__clamp__();
     updateConfigInternal(init_config);
   }
@@ -195,7 +250,8 @@ private:
   void callCallback(ConfigType &config, int level)
   {
     if (callback_) // At startup we need to load the configuration with all level bits set. (Everything has changed.)
-      try {
+      try
+      {
         callback_(config, level);
       }
       catch (std::exception &e)
@@ -210,8 +266,8 @@ private:
       ROS_DEBUG("setCallback did not call callback because it was zero."); /// @todo kill this line.
   }
 
-  bool setConfigCallback(dynamic_reconfigure::Reconfigure::Request &req, 
-          dynamic_reconfigure::Reconfigure::Response &rsp)
+  bool setConfigCallback(dynamic_reconfigure::Reconfigure::Request &req,
+                         dynamic_reconfigure::Reconfigure::Response &rsp)
   {
     boost::recursive_mutex::scoped_lock lock(mutex_);
 
@@ -219,14 +275,14 @@ private:
     new_config.__fromMessage__(req.config);
     new_config.__clamp__();
     uint32_t level = config_.__level__(new_config);
-    
+
     callCallback(new_config, level);
 
     updateConfigInternal(new_config);
     new_config.__toMessage__(rsp.config);
     return true;
   }
-  
+
   void updateConfigInternal(const ConfigType &config)
   {
     boost::recursive_mutex::scoped_lock lock(mutex_);
@@ -234,6 +290,12 @@ private:
     config_.__toServer__(node_handle_);
     dynamic_reconfigure::Config msg;
     config_.__toMessage__(msg);
+
+    if (storage_)
+    {
+      storage_->saveConfig(msg);
+    }
+
     update_pub_.publish(msg);
   }
 };

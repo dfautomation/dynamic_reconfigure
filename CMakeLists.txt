@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(dynamic_reconfigure)
 
-find_package(catkin REQUIRED COMPONENTS message_generation roscpp std_msgs)
+find_package(catkin REQUIRED COMPONENTS message_generation pluginlib roscpp std_msgs)
 find_package(Boost REQUIRED COMPONENTS system thread)
 
 include_directories(include ${catkin_INCLUDE_DIRS})
@@ -31,7 +31,7 @@ endif()
 
 catkin_package(LIBRARIES dynamic_reconfigure_config_init_mutex
                INCLUDE_DIRS include
-               CATKIN_DEPENDS message_runtime std_msgs
+               CATKIN_DEPENDS message_runtime pluginlib std_msgs
                CFG_EXTRAS dynamic_reconfigure-extras.cmake
 )
 
