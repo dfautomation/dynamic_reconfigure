@@ -31,18 +31,19 @@
 # POSSIBILITY OF SUCH DAMAGE.
 
 """
-Python client API for dynamic_reconfigure (L{DynamicReconfigureClient}) as well as 
+Python client API for dynamic_reconfigure (L{DynamicReconfigureClient}) as well as
 example server implementation (L{DynamicReconfigureServer}).
 """
 
 from __future__ import with_statement
 
 try:
-    import roslib; roslib.load_manifest('dynamic_reconfigure')
+    import roslib
+    roslib.load_manifest('dynamic_reconfigure')
 except:
     pass
 import rospy
-import rosservice                  
+import rosservice
 import threading
 import time
 import copy
@@ -52,28 +53,63 @@ from dynamic_reconfigure.msg import Config as ConfigMsg
 from dynamic_reconfigure.msg import ConfigDescription as ConfigDescrMsg
 from dynamic_reconfigure.msg import IntParameter, BoolParameter, StrParameter, DoubleParameter, ParamDescription
 from dynamic_reconfigure.encoding import *
+from dynamic_reconfigure.storage import load_plugin
+
 
 class Server(object):
+
     def __init__(self, type, callback):
         self.mutex = threading.Lock()
         self.type = type
         self.config = type.defaults.copy()
 
+        # setup storage
+        storage_backend = None
+        param_name = rospy.search_param('dynamic_reconfigure_storage_backend_py')
+        if param_name:
+            storage_backend = rospy.get_param(param_name)
+
+        storage_url = None
+        param_name = rospy.search_param('dynamic_reconfigure_storage_url')
+        if param_name:
+            storage_url = rospy.get_param(param_name)
+
+        storage_reset = None
+        param_name = rospy.search_param('dynamic_reconfigure_storage_reset')
+        if param_name:
+            storage_reset = rospy.get_param(param_name)
+
+        self.storage = None
+        if storage_backend:
+            storage_klass = load_plugin(storage_backend)
+            if storage_klass:
+                self.storage = storage_klass(rospy.get_name(), storage_url)
+            else:
+                rospy.logerr('Failed to create the %s storage backend, are you sure it is properly registered?', storage_backend)
+
+        # setup config
         self.description = encode_description(type)
         self._copy_from_parameter_server()
+
+        if self.storage and not storage_reset:
+            msg = encode_config(self.config)
+            msg = self.storage.load_config(msg)
+            if msg:
+                self.config.update(decode_config(msg))
+
         self.callback = callback
-        self._clamp(self.config) 
+        self._clamp(self.config)
 
         # setup group defaults
         self.config['groups'] = get_tree(self.description)
         self.config = initial_config(encode_config(self.config), type.config_description)
 
         self.descr_topic = rospy.Publisher('~parameter_descriptions', ConfigDescrMsg, latch=True, queue_size=10)
-        self.descr_topic.publish(self.description);
-        
+        self.descr_topic.publish(self.description)
+
         self.update_topic = rospy.Publisher('~parameter_updates', ConfigMsg, latch=True, queue_size=10)
-        self._change_config(self.config, ~0) # Consistent with the C++ API, the callback gets called with level=~0 (i.e. -1)
-        
+        self._change_config(self.config, ~0)  # Consistent with the C++ API, the callback gets called with level=~0 (i.e. -1)
+
         self.set_service = rospy.Service('~set_parameters', ReconfigureSrv, self._set_callback)
 
     def update_configuration(self, changes):
@@ -100,13 +136,17 @@ class Server(object):
             msg = 'Reconfigure callback should return a possibly updated configuration.'
             rospy.logerr(msg)
             raise DynamicReconfigureCallbackException(msg)
-        
+
         self._copy_to_parameter_server()
-        
-        self.update_topic.publish(encode_config(self.config))
+
+        msg = encode_config(self.config)
+        if self.storage:
+            self.storage.save_config(msg)
+
+        self.update_topic.publish(msg)
 
         return self.config
-   
+
     def _calc_level(self, config1, config2):
         level = 0
         for param in extract_params(self.type.config_description):
@@ -116,14 +156,14 @@ class Server(object):
         return level
 
     def _clamp(self, config):
-        for param in extract_params(self.type.config_description): 
-            maxval = self.type.max[param['name']] 
-            minval = self.type.min[param['name']] 
+        for param in extract_params(self.type.config_description):
+            maxval = self.type.max[param['name']]
+            minval = self.type.min[param['name']]
             val = config[param['name']]
-            if val > maxval and maxval != "": 
-                config[param['name']] = maxval 
-            elif val < minval and minval != "": 
-                config[param['name']] = minval 
+            if val > maxval and maxval != "":
+                config[param['name']] = maxval
+            elif val < minval and minval != "":
+                config[param['name']] = minval
 
     def _set_callback(self, req):
         return encode_config(self.update_configuration(decode_config(req.config, self.type.config_description)))
