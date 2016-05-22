@@ -65,14 +65,14 @@ id = 0
 class ParameterGenerator:
     minval = {
             'int' : -0x80000000, #'INT_MIN',
-            'double' : '-std::numeric_limits<double>::infinity()',
+            'double' : float('-inf'), #'-std::numeric_limits<double>::infinity()',
             'str' : '',
             'bool' : False,
             }
             
     maxval = {
             'int' : 0x7FFFFFFF, #'INT_MAX',
-            'double' : 'std::numeric_limits<double>::infinity()',
+            'double' : float('inf'), #'std::numeric_limits<double>::infinity()',
             'str' : '',
             'bool' : True,
             }
@@ -411,8 +411,15 @@ $i.desc=$description $range"""
         type = param["type"]
         if type == 'str':
             return '"'+val+'"'
-        if type in [ 'int', 'double']:
+        if type == 'int':
             return str(val)
+        if type == 'double':
+            if val == float('inf'):
+                return 'std::numeric_limits<double>::infinity()'
+            elif val == -float('inf'):
+                return '-std::numeric_limits<double>::infinity()'
+            else:
+                return str(val)
         if  type == 'bool':
             return { True : 1, False : 0 }[val]
         raise TypeError(type)
