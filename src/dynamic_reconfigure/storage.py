@@ -62,7 +62,7 @@ def load_plugin(plugin):
         if plugin in p_modules:
             try:
                 # import the specified plugin module
-                (p_module_0, p_klass) = plugin.split(':')
+                (p_module_0, p_klass) = plugin.rsplit('.', 1)
                 mod = __import__(p_module_0)
                 for sub_mod in p_module_0.split('.')[1:]:
                     mod = getattr(mod, sub_mod)
@@ -94,7 +94,7 @@ def load_plugins():
         for p_module in p_modules:
             try:
                 # import the specified plugin module
-                (p_module_0, p_klass) = p_module.split(':')
+                (p_module_0, p_klass) = p_module.rsplit('.', 1)
                 mod = __import__(p_module_0)
                 for sub_mod in p_module_0.split('.')[1:]:
                     mod = getattr(mod, sub_mod)
