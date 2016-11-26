@@ -49,6 +49,7 @@
 #include <boost/thread/recursive_mutex.hpp>
 #include <pluginlib/class_loader.h>
 #include <ros/node_handle.h>
+#include <ros/this_node.h>
 #include <dynamic_reconfigure/base_storage.h>
 #include <dynamic_reconfigure/ConfigDescription.h>
 #include <dynamic_reconfigure/Reconfigure.h>
