@@ -102,7 +102,10 @@ class Server(object):
             msg = encode_config(self.config)
             msg = self.storage.load_config(msg)
             if msg:
-                self.config.update(decode_config(msg))
+                new_config = decode_config(msg, self.type.config_description)
+                for k, v in new_config.items():
+                    if k in self.config:
+                        self.config[k] = v
 
         self.callback = callback
         self._clamp(self.config)
