@@ -2,6 +2,30 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.5.48 (2017-04-07)
+-------------------
+* [Bugfix] dont enforce ROS names for constants (`#84 <https://github.com/ros/dynamic_reconfigure/issues/84>`_)
+* [Compiler warnings] avoid unused-parameter compiler warnings in specialized ParamDescription<std::string>::clamp() (`#83 <https://github.com/ros/dynamic_reconfigure/issues/83>`_)
+* Contributors: Johannes Meyer, Mikael Arguedas
+
+1.5.47 (2017-03-27)
+-------------------
+* reset received_configuration\_ for every request sent (`#82 <https://github.com/ros/dynamic_reconfigure/issues/82>`_)
+* Rename arguments (with a\_ prefix) to avoid Wshadow warnings. (`#80 <https://github.com/ros/dynamic_reconfigure/issues/80>`_)
+  handle infinity in python generation, fixes (`#77 <https://github.com/ros/dynamic_reconfigure/issues/77>`_)
+* Add a c++ Dynamic Reconfigure Client (`#78 <https://github.com/ros/dynamic_reconfigure/issues/78>`_)
+* Enforce valid descriptions in cfg files (`#74 <https://github.com/ros/dynamic_reconfigure/issues/74>`_)
+* Fix callback returned by get_description_callback (`#73 <https://github.com/ros/dynamic_reconfigure/issues/73>`_) from ros/description_cb
+* Contributors: Jeff Eberl, Mikael Arguedas
+
+1.5.46 (2016-11-15)
+-------------------
+* Add missing group params to wikidoc (`#68 <https://github.com/ros/dynamic_reconfigure/issues/68>`_)
+  The catkin generated wikidoc files were missing parameters defined as groups.
+  Both the Dox and UsageDox file were generated correctly, but the wikidoc was
+  using the wrong method to traverse all groups.
+* Contributors: Mark Horn
+
 1.5.45 (2016-10-24)
 -------------------
 * Merge pull request `#65 <https://github.com/ros/dynamic_reconfigure/issues/65>`_ from bulwahn/master
