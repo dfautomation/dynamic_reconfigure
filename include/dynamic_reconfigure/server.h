@@ -85,7 +85,8 @@ public:
     init();
   }
 
-  ~Server() {
+  ~Server()
+  {
     storage_.reset();
   }
 

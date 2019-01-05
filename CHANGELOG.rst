@@ -2,6 +2,33 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.5.50 (2018-10-02)
+-------------------
+* final-keyword (`#113 <https://github.com/ros/dynamic_reconfigure/issues/113>`_)
+  * Add final keyword to child class since parent has virtual methods and grand parent doesn't have a virtual destructor. This allows the code to be compiled by clang version 6.0 and above.
+* [indentation fixups]
+  * Use textwrap dedent for multiline strings
+  * Remove extra indentation in wikidoc
+  * Use textwrap.dedent to form the error message
+* [test fix] call shutdown to prevent test from hanging (`#119 <https://github.com/ros/dynamic_reconfigure/issues/119>`_)
+* Modernize Python code (`#102 <https://github.com/ros/dynamic_reconfigure/issues/102>`_)
+  * Use new-style classes
+  * Use with statement to ensure files are closed
+* Python 3 compatibility (`#105 <https://github.com/ros/dynamic_reconfigure/issues/105>`_)
+  * some randon python cleanup
+  * remove iter* method for their 2/3 compatible equivalent
+* Contributors: Eric Wieser, Jason Mercer, Mikael Arguedas
+
+1.5.49 (2017-07-27)
+-------------------
+* Pep8 (`#93 <https://github.com/ros/dynamic_reconfigure/issues/93>`_)
+* Python3 use print function and not statement (`#92 <https://github.com/ros/dynamic_reconfigure/issues/92>`_)
+* add shebang line in setup_custom_pythonpath.sh.in template (`#91 <https://github.com/ros/dynamic_reconfigure/issues/91>`_)
+* switch to package format 2 (`#89 <https://github.com/ros/dynamic_reconfigure/issues/89>`_)
+* remove trailing whitespaces (`#88 <https://github.com/ros/dynamic_reconfigure/issues/88>`_)
+* Reraising DynamicReconfigureCallbackException in case of a failing service call (`#87 <https://github.com/ros/dynamic_reconfigure/issues/87>`_)
+* Contributors: Arne Hitzmann, Mikael Arguedas
+
 1.5.48 (2017-04-07)
 -------------------
 * [Bugfix] dont enforce ROS names for constants (`#84 <https://github.com/ros/dynamic_reconfigure/issues/84>`_)

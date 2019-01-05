@@ -40,19 +40,17 @@ from __future__ import with_statement
 try:
     import roslib
     roslib.load_manifest('dynamic_reconfigure')
-except:
+except Exception:
     pass
 import rospy
-import rosservice
 import threading
-import time
 import copy
+
 from dynamic_reconfigure import DynamicReconfigureCallbackException
-from dynamic_reconfigure.srv import Reconfigure as ReconfigureSrv
+from dynamic_reconfigure.encoding import decode_config, encode_config, encode_description, extract_params, get_tree, initial_config
 from dynamic_reconfigure.msg import Config as ConfigMsg
 from dynamic_reconfigure.msg import ConfigDescription as ConfigDescrMsg
-from dynamic_reconfigure.msg import IntParameter, BoolParameter, StrParameter, DoubleParameter, ParamDescription
-from dynamic_reconfigure.encoding import *
+from dynamic_reconfigure.srv import Reconfigure as ReconfigureSrv
 from dynamic_reconfigure.storage import load_plugin
 
 

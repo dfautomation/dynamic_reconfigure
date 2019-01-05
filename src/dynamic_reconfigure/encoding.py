@@ -32,18 +32,17 @@
 
 try:
     import roslib; roslib.load_manifest('dynamic_reconfigure')
-except:
+except Exception:
     pass
-import rospy
-import inspect
 import copy
 import sys
 
+from dynamic_reconfigure.msg import BoolParameter, DoubleParameter, IntParameter, ParamDescription, StrParameter
 from dynamic_reconfigure.msg import Config as ConfigMsg
 from dynamic_reconfigure.msg import ConfigDescription as ConfigDescrMsg
 from dynamic_reconfigure.msg import Group as GroupMsg
 from dynamic_reconfigure.msg import GroupState
-from dynamic_reconfigure.msg import IntParameter, BoolParameter, StrParameter, DoubleParameter, ParamDescription
+
 
 class Config(dict):
     def __init__(self, *args, **kwargs):
@@ -57,7 +56,7 @@ class Config(dict):
             self.__dict__[key] = val
 
     def __repr__(self):
-        return super(Config, self).__repr__() 
+        return super(Config, self).__repr__()
 
     def __setitem__(self, key, value):
         return super(Config, self).__setitem__(key, value)
@@ -76,11 +75,11 @@ class Config(dict):
 
     def __deepcopy__(self, memo):
         c = type(self)({})
-        for key, value in self.iteritems():
+        for key, value in self.items():
             c[copy.deepcopy(key)] = copy.deepcopy(value)
 
         return c
-        
+
 
 def encode_description(descr):
     msg = ConfigDescrMsg()
@@ -90,9 +89,10 @@ def encode_description(descr):
     msg.groups = encode_groups(None, descr.config_description)
     return msg
 
+
 def encode_groups(parent, group):
     group_list = []
-    
+
     msg = GroupMsg()
 
     msg.name = group['name']
@@ -109,21 +109,26 @@ def encode_groups(parent, group):
 
     return group_list
 
+
 def encode_config(config, flat=True):
     msg = ConfigMsg()
     for k, v in config.items():
         ## @todo add more checks here?
-        if   type(v) == int:   msg.ints.append(IntParameter(k, v))
-        elif type(v) == bool:  msg.bools.append(BoolParameter(k, v))
-        elif type(v) == str:   msg.strs.append(StrParameter(k, v))
-        elif sys.version_info.major < 3 and type(v) == unicode:
+        if type(v) == int:
+            msg.ints.append(IntParameter(k, v))
+        elif type(v) == bool:
+            msg.bools.append(BoolParameter(k, v))
+        elif type(v) == str:
             msg.strs.append(StrParameter(k, v))
-        elif type(v) == float: msg.doubles.append(DoubleParameter(k, v))
+        elif sys.version_info.major < 3 and isinstance(v, unicode):
+            msg.strs.append(StrParameter(k, v))
+        elif type(v) == float:
+            msg.doubles.append(DoubleParameter(k, v))
         elif type(v) == dict or isinstance(v, Config):
             if flat is True:
                 def flatten(g):
                     groups = []
-                    for name, group in g['groups'].items():
+                    for _name, group in g['groups'].items():
                         groups.extend(flatten(group))
                         groups.append(GroupState(group['name'], group['state'], group['id'], group['parent']))
                     return groups
@@ -134,6 +139,7 @@ def encode_config(config, flat=True):
 
     return msg
 
+
 def group_dict(group):
     try:
         state = group.state
@@ -142,16 +148,17 @@ def group_dict(group):
     if hasattr(group, 'type'):
         type = group.type
     else:
-        type =''
+        type = ''
     return Config({
-        'id' : group.id,
-        'parent' : group.parent,
-        'name' : group.name,
-        'type' : type,
+        'id': group.id,
+        'parent': group.parent,
+        'name': group.name,
+        'type': type,
         'state': state,
-        'groups' : Config({}),
-        'parameters' : Config({}),
+        'groups': Config({}),
+        'parameters': Config({}),
     })
+
 
 def decode_description(msg):
     mins = decode_config(msg.min)
@@ -165,14 +172,14 @@ def decode_description(msg):
         for param in msg.parameters:
             name = param.name
             params.append({
-               'name': name,
-               'min' : mins[name],
-               'max' : maxes[name],
-               'default' : defaults[name],
-               'type' : param.type,
-               'level': param.level,
-               'description' : param.description,
-               'edit_method' : param.edit_method,
+                'name': name,
+                'min': mins[name],
+                'max': maxes[name],
+                'default': defaults[name],
+                'type': param.type,
+                'level': param.level,
+                'description': param.description,
+                'edit_method': param.edit_method,
             })
         return params
 
@@ -181,26 +188,27 @@ def decode_description(msg):
         if group.id == 0:
             groups = group_dict(group)
             groups['parameters'] = params_from_msg(group)
-  
+
     def build_tree(group):
         children = Config({})
         for g in grouplist:
             if g.id == 0:
-               pass
+                pass
             elif g.parent == group['id']:
-               gd = group_dict(g)
-               
-               gd['parameters'] = params_from_msg(g)
-               gd['groups'] = build_tree(gd)
-               # add the dictionary into the tree
-               children[gd['name']] = gd
+                gd = group_dict(g)
+
+                gd['parameters'] = params_from_msg(g)
+                gd['groups'] = build_tree(gd)
+                # add the dictionary into the tree
+                children[gd['name']] = gd
         return children
 
     groups['groups'] = build_tree(groups)
 
     return groups
 
-def get_tree(m, group = None):
+
+def get_tree(m, group=None):
     if group is None:
         for x in m.groups:
             if x.id == 0:
@@ -209,7 +217,7 @@ def get_tree(m, group = None):
     children = Config({})
     for g in m.groups:
         if g.id == 0:
-          pass
+            pass
         elif g.parent == group.id:
             gd = group_dict(g)
 
@@ -223,9 +231,11 @@ def get_tree(m, group = None):
     else:
         return children
 
-def initial_config(msg, description = None):
+
+def initial_config(msg, description=None):
     d = Config([(kv.name, kv.value) for kv in msg.bools + msg.ints + msg.strs + msg.doubles])
-    def gt(m, descr, group = None):
+
+    def gt(m, descr, group=None):
         # get the default group
         if group is None:
             for x in m.groups:
@@ -267,16 +277,17 @@ def initial_config(msg, description = None):
         def add_params(group, descr):
             for param in descr['parameters']:
                 group['parameters'][param['name']] = d[param['name']]
-            for n, g in group['groups'].items():
+            for _n, g in group['groups'].items():
                 for dr in descr['groups']:
                     if dr['name'] == g['name']:
                         add_params(g, dr)
 
         add_params(d['groups'], description)
 
-    return d 
+    return d
 
-def decode_config(msg, description = None):
+
+def decode_config(msg, description=None):
     if sys.version_info.major < 3:
         for s in msg.strs:
             if not isinstance(s.value, unicode):
@@ -288,30 +299,32 @@ def decode_config(msg, description = None):
     d = Config([(kv.name, kv.value) for kv in msg.bools + msg.ints + msg.strs + msg.doubles])
     if not msg.groups == [] and description is not None:
         d["groups"] = get_tree(msg)
-        
+
         def add_params(group, descr):
             for param in descr['parameters']:
                 if param['name'] in d.keys():
                     group[param['name']] = d[param['name']]
-            for n, g in group['groups'].items():
-                for nr, dr in descr['groups'].items():
+            for _n, g in group['groups'].items():
+                for _nr, dr in descr['groups'].items():
                     if dr['name'] == g['name']:
                         add_params(g, dr)
 
         add_params(d['groups'], description)
 
-    return d 
+    return d
+
 
 def extract_params(group):
     params = []
     params.extend(group['parameters'])
     try:
-        for n,g in group['groups'].items():
+        for _n, g in group['groups'].items():
             params.extend(extract_params(g))
     except AttributeError:
         for g in group['groups']:
             params.extend(extract_params(g))
     return params
+
 
 def get_parents(group, descriptions):
     parents = []

@@ -36,10 +36,11 @@ bool_t = "bool"
 int_t = "int"
 double_t = "double"
 
+
 class ParameterGenerator():
     @staticmethod
     def dummy(*params, **nparams):
-        return 
+        return
 
     def __getattr__(self, name):
         return self.dummy
