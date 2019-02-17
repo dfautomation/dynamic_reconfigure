@@ -2,6 +2,17 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Skip invalid config key when loading configuration from storage.
+  Make the python-based server resembles more closely the
+  C++-based server, which checks loaded configuration through a proper
+  constructor of the config class.
+* Add storage plugin for Python.
+* Create storage plugin to provide persistent parameters.
+* Fix bug: Doubles without min/max being converted into strings.
+* Contributors: Patrick Chin, Patrick Chin Jun Hua
+
 1.5.50 (2018-10-02)
 -------------------
 * final-keyword (`#113 <https://github.com/ros/dynamic_reconfigure/issues/113>`_)
