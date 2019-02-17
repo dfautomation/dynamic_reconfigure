@@ -2,8 +2,8 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.5.51 (2019-02-17)
+-------------------
 * Skip invalid config key when loading configuration from storage.
   Make the python-based server resembles more closely the
   C++-based server, which checks loaded configuration through a proper
