@@ -49,7 +49,6 @@
 #include <boost/thread/recursive_mutex.hpp>
 #include <pluginlib/class_loader.h>
 #include <ros/node_handle.h>
-#include <ros/this_node.h>
 #include <dynamic_reconfigure/base_storage.h>
 #include <dynamic_reconfigure/ConfigDescription.h>
 #include <dynamic_reconfigure/Reconfigure.h>
@@ -225,7 +224,7 @@ private:
       try
       {
         storage_ = bs_loader_.createInstance(storage_backend);
-        storage_->initialize(ros::this_node::getName(), storage_url);
+        storage_->initialize(node_handle_.getNamespace(), storage_url);
       }
       catch (const pluginlib::PluginlibException& ex)
       {

@@ -88,7 +88,7 @@ class Server(object):
         if storage_backend:
             storage_klass = load_plugin(storage_backend)
             if storage_klass:
-                self.storage = storage_klass(rospy.get_name(), storage_url)
+                self.storage = storage_klass(rospy.get_name() if self.ns == '~' else rospy.resolve_name(self.ns), storage_url)
             else:
                 rospy.logerr('Failed to create the %s storage backend, are you sure it is properly registered?', storage_backend)
 
