@@ -2,6 +2,11 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix storage path for dynamic reconfigure server in nested namespace.
+* Contributors: Patrick Chin
+
 1.5.51 (2019-02-17)
 -------------------
 * Skip invalid config key when loading configuration from storage.
