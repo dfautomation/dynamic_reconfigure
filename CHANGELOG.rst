@@ -2,8 +2,8 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.5.52 (2020-05-06)
+-------------------
 * Fix storage path for dynamic reconfigure server in nested namespace.
 * Contributors: Patrick Chin
 
