@@ -2,12 +2,12 @@
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
   <name>dynamic_reconfigure</name>
-  <version>1.5.52</version>
+  <version>1.6.3</version>
   <description>
-    This unary stack contains the dynamic_reconfigure package which provides a means to change
-    node parameters at any time without having to restart the node.
+    The dynamic_reconfigure package provides a means to update parameters
+    at runtime without having to restart the node.
   </description>
-  <maintainer email="mikael@osrfoundation.org">Mikael Arguedas</maintainer>
+  <maintainer email="michael@openrobotics.org">Michael Carroll</maintainer>
   <license>BSD</license>
 
   <url type="website">http://ros.org/wiki/dynamic_reconfigure</url>
@@ -21,6 +21,7 @@
 
   <buildtool_depend version_gte="0.5.87">catkin</buildtool_depend>
 
+  <build_depend>cpp_common</build_depend>
   <build_depend>message_generation</build_depend>
   <build_depend>roscpp_serialization</build_depend>
   <build_depend>rostest</build_depend>

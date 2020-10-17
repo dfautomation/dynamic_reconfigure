@@ -31,12 +31,25 @@ macro(generate_dynamic_reconfigure_options)
     # since it might contain dynamic_reconfigure or Python code of the current package
     set("_CUSTOM_PYTHONPATH_ENV")
     if(EXISTS "${CATKIN_DEVEL_PREFIX}/${CATKIN_GLOBAL_PYTHON_DESTINATION}")
-      configure_file(
-        "${dynamic_reconfigure_BASE_DIR}/cmake/setup_custom_pythonpath.sh.in"
-        "setup_custom_pythonpath.sh"
-        @ONLY
-      )
-      set("_CUSTOM_PYTHONPATH_ENV" "${CMAKE_CURRENT_BINARY_DIR}/setup_custom_pythonpath.sh")
+      if(WIN32)
+        configure_file(
+          "${dynamic_reconfigure_BASE_DIR}/cmake/setup_custom_pythonpath.bat.in"
+          "setup_custom_pythonpath.bat"
+          @ONLY
+        )
+        set("_CUSTOM_PYTHONPATH_ENV" "${CMAKE_CURRENT_BINARY_DIR}/setup_custom_pythonpath.bat")
+      else()
+        configure_file(
+          "${dynamic_reconfigure_BASE_DIR}/cmake/setup_custom_pythonpath.sh.in"
+          "setup_custom_pythonpath.sh"
+          @ONLY
+        )
+        set("_CUSTOM_PYTHONPATH_ENV" "${CMAKE_CURRENT_BINARY_DIR}/setup_custom_pythonpath.sh")
+      endif()
+    else()
+      # Package could have no ${CATKIN_GLOBAL_PYTHON_DESTINATION} if it doesn't call
+      # catkin_python_setup(), however we still need to use the correct Python.
+      set("_CUSTOM_PYTHONPATH_ENV" "${PYTHON_EXECUTABLE}")
     endif()
 
     assert(CATKIN_ENV)
@@ -99,6 +112,7 @@ macro(dynreconf_called)
     endif()
 
     # make sure we can find generated messages and that they overlay all other includes
+    # Use system to skip warnings from these includes
     include_directories(BEFORE ${CATKIN_DEVEL_PREFIX}/${CATKIN_GLOBAL_INCLUDE_DESTINATION})
     # pass the include directory to catkin_package()
     list(APPEND ${PROJECT_NAME}_INCLUDE_DIRS ${CATKIN_DEVEL_PREFIX}/${CATKIN_GLOBAL_INCLUDE_DESTINATION})
