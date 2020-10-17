@@ -2,6 +2,9 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+
 1.6.3 (2020-03-19)
 ------------------
 * Revert `#140 <https://github.com/ros/dynamic_reconfigure/issues/140>`_ (`#152 <https://github.com/ros/dynamic_reconfigure/issues/152>`_)
