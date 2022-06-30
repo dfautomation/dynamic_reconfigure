@@ -2,8 +2,8 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.6.5 (2022-06-30)
+------------------
 * Add Loader=yaml.Loader to yaml.load (`#178 <https://github.com/ros/dynamic_reconfigure/issues/178>`_)
 * fix: Race condition on quickly setting and getting config (`#188 <https://github.com/ros/dynamic_reconfigure/issues/188>`_) (`#190 <https://github.com/ros/dynamic_reconfigure/issues/190>`_)
 * Contributors: Charles Jenkins, Rokus Ottervanger
