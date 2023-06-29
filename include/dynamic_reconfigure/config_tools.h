@@ -99,6 +99,23 @@ public:
         val = i->value;
         return true;
       }
+
+    if (!init || name.empty()) return false;
+
+    std::string name2;
+    if (name.back() == '_')
+      name2 = name.substr(0, name.length() - 1);
+    else
+      name2 = name + '_';
+
+    if (name2.empty()) return false;
+
+    for (typename std::vector<VT>::const_iterator i = vec.begin(); i != vec.end(); ++i)
+      if (i->name == name2)
+      {
+        val = i->value;
+        return true;
+      }
     return false;
   }
 
@@ -144,6 +161,8 @@ public:
     msg.doubles.clear();
     msg.groups.clear();
   }
+
+  static bool init;
 };
 
 }

@@ -104,6 +104,10 @@ class Server(object):
                 for k, v in new_config.items():
                     if k in self.config:
                         self.config[k] = v
+                    elif k:
+                        k = k[:-1] if k[-1] == '_' else k + '_'
+                        if k and k in self.config:
+                            self.config[k] = v
 
         self.callback = callback
         self._clamp(self.config)

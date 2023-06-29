@@ -50,6 +50,7 @@
 #include <pluginlib/class_loader.h>
 #include <ros/node_handle.h>
 #include <dynamic_reconfigure/base_storage.h>
+#include <dynamic_reconfigure/config_tools.h>
 #include <dynamic_reconfigure/ConfigDescription.h>
 #include <dynamic_reconfigure/Reconfigure.h>
 
@@ -241,7 +242,9 @@ private:
       dynamic_reconfigure::Config msg;
       init_config.__toMessage__(msg);
       storage_->loadConfig(msg);
+      dynamic_reconfigure::ConfigTools::init = true;
       init_config.__fromMessage__(msg);
+      dynamic_reconfigure::ConfigTools::init = false;
     }
 
     init_config.__clamp__();
