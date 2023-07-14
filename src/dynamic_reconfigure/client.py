@@ -178,15 +178,28 @@ class Client(object):
 
         # Cast the parameters to the appropriate types
         if self.param_description is not None:
-            for name, value in list(changes.items())[:]:
+            changes_list = changes.items()
+            changes = {}
+            for name, value in changes_list:
                 if name != 'groups':
-                    dest_type = self._param_types.get(name)
-                    if dest_type is None:
-                        raise DynamicReconfigureParameterException('don\'t know parameter: %s' % name)
-
                     try:
                         found = False
-                        descr = [x for x in self.param_description if x['name'].lower() == name.lower()][0]
+                        name = name.lower()
+                        alt_name = name[:-1] if name.endswith('_') else name + '_'
+                        descr = None
+                        alt_descr = None
+
+                        for x in self.param_description:
+                            x_name = x['name'].lower()
+                            if x_name == name:
+                                descr = x
+                                break
+                            if x_name == alt_name:
+                                alt_descr = x
+
+                        descr = descr or alt_descr
+                        name = descr['name']
+                        dest_type = self._param_type_from_string(descr['type'])
 
                         # Fix not converting bools properly
                         if dest_type is bool and type(value) is str:
@@ -203,8 +216,8 @@ class Client(object):
                                     found = True
                         if not found:
                             if sys.version_info.major < 3:
-                                if type(value) is unicode:
-                                    changes[name] = unicode(value)
+                                if dest_type is str:
+                                    changes[name] = '%s' % value
                                 else:
                                     changes[name] = dest_type(value)
                             else:
