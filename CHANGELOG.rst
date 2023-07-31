@@ -2,8 +2,8 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.6.6 (2023-08-01)
+------------------
 * Ignore case and trailing underscore of param name when updating via Python client.
 * Auto-migrate config name when loading from storage.
 * Contributors: Patrick Chin
