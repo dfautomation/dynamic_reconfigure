@@ -2,6 +2,12 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Ignore case and trailing underscore of param name when updating via Python client.
+* Auto-migrate config name when loading from storage.
+* Contributors: Patrick Chin
+
 1.6.5 (2022-06-30)
 ------------------
 * Add Loader=yaml.Loader to yaml.load (`#178 <https://github.com/ros/dynamic_reconfigure/issues/178>`_)
