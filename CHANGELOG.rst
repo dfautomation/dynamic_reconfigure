@@ -2,6 +2,11 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Fix buildfarm compilation issue.
+* Contributors: Patrick Chin
+
 1.6.6 (2023-08-01)
 ------------------
 * Ignore case and trailing underscore of param name when updating via Python client.
