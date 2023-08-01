@@ -242,9 +242,9 @@ private:
       dynamic_reconfigure::Config msg;
       init_config.__toMessage__(msg);
       storage_->loadConfig(msg);
-      dynamic_reconfigure::ConfigTools::init = true;
+      dynamic_reconfigure::__migrate_param__ = true;
       init_config.__fromMessage__(msg);
-      dynamic_reconfigure::ConfigTools::init = false;
+      dynamic_reconfigure::__migrate_param__ = false;
     }
 
     init_config.__clamp__();

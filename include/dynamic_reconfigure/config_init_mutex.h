@@ -20,6 +20,7 @@
 namespace dynamic_reconfigure
 {
   extern DYNAMIC_RECONFIGURE_CONFIG_INIT_MUTEX_DECL boost::mutex __init_mutex__;
+  extern DYNAMIC_RECONFIGURE_CONFIG_INIT_MUTEX_DECL bool __migrate_param__;
 }
 
 #endif

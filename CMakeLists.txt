@@ -36,8 +36,7 @@ catkin_package(LIBRARIES dynamic_reconfigure_config_init_mutex
 )
 
 add_library(dynamic_reconfigure_config_init_mutex
-  src/dynamic_reconfigure_config_init_mutex.cpp
-  src/dynamic_reconfigure_config_tools.cpp)
+  src/dynamic_reconfigure_config_init_mutex.cpp)
 target_link_libraries(dynamic_reconfigure_config_init_mutex ${Boost_LIBRARIES})
 
 install(DIRECTORY include/dynamic_reconfigure/

@@ -5,6 +5,7 @@
 #include <vector>
 #include <dynamic_reconfigure/Config.h>
 #include <dynamic_reconfigure/Group.h>
+#include <dynamic_reconfigure/config_init_mutex.h>
 
 namespace dynamic_reconfigure
 {
@@ -100,7 +101,7 @@ public:
         return true;
       }
 
-    if (!init || name.empty()) return false;
+    if (!__migrate_param__ || name.empty()) return false;
 
     std::string name2;
     if (name.back() == '_')
@@ -161,8 +162,6 @@ public:
     msg.doubles.clear();
     msg.groups.clear();
   }
-
-  static bool init;
 };
 
 }
