@@ -2,8 +2,8 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.6.7 (2023-08-01)
+------------------
 * Fix buildfarm compilation issue.
 * Contributors: Patrick Chin
 
