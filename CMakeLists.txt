@@ -1,8 +1,8 @@
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.0.2)
 project(dynamic_reconfigure)
 
 find_package(catkin REQUIRED COMPONENTS message_generation pluginlib roscpp std_msgs)
-find_package(Boost REQUIRED COMPONENTS system thread chrono)
+find_package(Boost REQUIRED)
 
 include_directories(include)
 include_directories(SYSTEM ${catkin_INCLUDE_DIRS} ${Boost_INCLUDE_DIRS})
@@ -54,11 +54,12 @@ install(DIRECTORY cmake
 )
 install(DIRECTORY msg
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
-install(PROGRAMS scripts/dynparam
-        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
-install(PROGRAMS scripts/reconfigure_gui
-        DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
 install(DIRECTORY srv
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
 install(DIRECTORY templates
   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION})
+
+catkin_install_python(PROGRAMS
+  scripts/dynparam
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)

@@ -2,6 +2,32 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.7.3 (2022-05-05)
+------------------
+* Switch to new boost/bind/bind.hpp (`#191 <https://github.com/ros/dynamic_reconfigure/issues/191>`_)
+* Contributors: Jochen Sprickerhof
+
+1.7.2 (2022-02-19)
+------------------
+* Remove calls to string.{join,lower,upper} (`#174 <https://github.com/ros/dynamic_reconfigure/issues/174>`_)
+* do not use system for generated messages or configs (`#182 <https://github.com/ros/dynamic_reconfigure/issues/182>`_)
+* Contributors: Gaël ÉcorchardShingo Kitagawa
+
+1.7.1 (2020-08-28)
+------------------
+* narrow down required boost dependencies (`#160 <https://github.com/ros/dynamic_reconfigure/issues/160>`_)
+* Make Config object pickle-able in Python 3 (`#154 <https://github.com/ros/dynamic_reconfigure/issues/154>`_)
+* Fix python3 issue in a backward compatible way (`#157 <https://github.com/ros/dynamic_reconfigure/issues/157>`_)
+* import setup from setuptools instead of distutils-core (`#153 <https://github.com/ros/dynamic_reconfigure/issues/153>`_)
+* Contributors: Alejandro Hernández Cordero, Mikael Arguedas, Scott K Logan
+
+1.7.0 (2020-03-05)
+------------------
+* Fixing compile error with cpp client when using -Werror=reorder. (`#118 <https://github.com/ros/dynamic_reconfigure/issues/118>`_)
+* ConfigType.h.template: fixed warnings (`#136 <https://github.com/ros/dynamic_reconfigure/issues/136>`_) (`#149 <https://github.com/ros/dynamic_reconfigure/issues/149>`_)
+* Bump CMake minimum version to use CMP0048 (`#148 <https://github.com/ros/dynamic_reconfigure/issues/148>`_)
+* Contributors: Christopher Wecht, Michael Carroll
+
 1.6.7 (2023-08-01)
 ------------------
 * Fix buildfarm compilation issue.

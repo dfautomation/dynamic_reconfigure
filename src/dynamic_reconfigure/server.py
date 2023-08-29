@@ -58,7 +58,7 @@ class Server(object):
 
     def __init__(self, type, callback, namespace=""):
         self.mutex = threading.Lock()
-        if not namespace:
+        if not namespace or namespace == "~":
             self.ns = "~"
         else:
             if namespace[0] not in ["/", "~"]:
