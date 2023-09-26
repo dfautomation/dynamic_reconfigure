@@ -2,8 +2,8 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.7.4 (2023-09-26)
+------------------
 * Update python3 dependency.
 * Merge remote-tracking branch 'ros/noetic-devel'
 * Contributors: Farhan Mustar, Patrick Chin
