@@ -2,6 +2,12 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Update python3 dependency.
+* Merge remote-tracking branch 'ros/noetic-devel'
+* Contributors: Farhan Mustar, Patrick Chin
+
 1.7.3 (2022-05-05)
 ------------------
 * Switch to new boost/bind/bind.hpp (`#191 <https://github.com/ros/dynamic_reconfigure/issues/191>`_)
