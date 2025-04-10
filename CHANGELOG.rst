@@ -2,8 +2,8 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.7.4 (2025-04-10)
+------------------
 * Remove roslib.load_manifest (`#201 <https://github.com/ros/dynamic_reconfigure/issues/201>`_)
 * Fix unsafe yaml load on dynparam (`#202 <https://github.com/ros/dynamic_reconfigure/issues/202>`_)
 * Set ns as '~' when namespace is '~' (`#169 <https://github.com/ros/dynamic_reconfigure/issues/169>`_)
