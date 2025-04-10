@@ -2,6 +2,15 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Remove roslib.load_manifest (`#201 <https://github.com/ros/dynamic_reconfigure/issues/201>`_)
+* Fix unsafe yaml load on dynparam (`#202 <https://github.com/ros/dynamic_reconfigure/issues/202>`_)
+* Set ns as '~' when namespace is '~' (`#169 <https://github.com/ros/dynamic_reconfigure/issues/169>`_)
+* Support float('inf') for cfg file (`#168 <https://github.com/ros/dynamic_reconfigure/issues/168>`_)
+* Add BSD LICENSE file (`#193 <https://github.com/ros/dynamic_reconfigure/issues/193>`_)
+* Contributors: Florencia, Shane Loretz, Shingo Kitagawa, Yuki Furuta
+
 1.7.3 (2022-05-05)
 ------------------
 * Add Loader=yaml.Loader to yaml.load (`#178 <https://github.com/ros/dynamic_reconfigure/issues/178>`_)
