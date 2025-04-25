@@ -2,8 +2,8 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+1.7.5 (2025-04-25)
+------------------
 * check group name validity to avoid compilation error later (`#97 <https://github.com/ros/dynamic_reconfigure/issues/97>`_)
 * Explicit use sys.exit (`#159 <https://github.com/ros/dynamic_reconfigure/issues/159>`_)
 * Fix flaky multipleClients test (`#167 <https://github.com/ros/dynamic_reconfigure/issues/167>`_)
