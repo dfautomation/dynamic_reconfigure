@@ -2,6 +2,14 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* check group name validity to avoid compilation error later (`#97 <https://github.com/ros/dynamic_reconfigure/issues/97>`_)
+* Explicit use sys.exit (`#159 <https://github.com/ros/dynamic_reconfigure/issues/159>`_)
+* Fix flaky multipleClients test (`#167 <https://github.com/ros/dynamic_reconfigure/issues/167>`_)
+* Changed variable to size_t for consistency (`#196 <https://github.com/ros/dynamic_reconfigure/issues/196>`_)
+* Contributors: Atsushi Watanabe, Mikael Arguedas, Sean Yen, karina-ranadive
+
 1.7.4 (2025-04-10)
 ------------------
 * Remove roslib.load_manifest (`#201 <https://github.com/ros/dynamic_reconfigure/issues/201>`_)
