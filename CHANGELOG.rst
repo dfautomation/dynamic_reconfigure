@@ -2,6 +2,11 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+Forthcoming
+-----------
+* Revert "Fix unsafe yaml load on dynparam (`#202 <https://github.com/ros/dynamic_reconfigure/issues/202>`_)" (`#206 <https://github.com/ros/dynamic_reconfigure/issues/206>`_)
+* Contributors: Shane Loretz
+
 1.7.5 (2025-04-25)
 ------------------
 * check group name validity to avoid compilation error later (`#97 <https://github.com/ros/dynamic_reconfigure/issues/97>`_)
