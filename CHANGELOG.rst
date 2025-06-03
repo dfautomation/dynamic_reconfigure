@@ -2,11 +2,28 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.7.6 (2025-05-20)
+------------------
+* Revert "Fix unsafe yaml load on dynparam (`#202 <https://github.com/ros/dynamic_reconfigure/issues/202>`_)" (`#206 <https://github.com/ros/dynamic_reconfigure/issues/206>`_)
+* Contributors: Shane Loretz
+
+1.7.5 (2025-04-25)
+------------------
+* check group name validity to avoid compilation error later (`#97 <https://github.com/ros/dynamic_reconfigure/issues/97>`_)
+* Explicit use sys.exit (`#159 <https://github.com/ros/dynamic_reconfigure/issues/159>`_)
+* Fix flaky multipleClients test (`#167 <https://github.com/ros/dynamic_reconfigure/issues/167>`_)
+* Changed variable to size_t for consistency (`#196 <https://github.com/ros/dynamic_reconfigure/issues/196>`_)
+* Remove roslib.load_manifest (`#201 <https://github.com/ros/dynamic_reconfigure/issues/201>`_)
+* Fix unsafe yaml load on dynparam (`#202 <https://github.com/ros/dynamic_reconfigure/issues/202>`_)
+* Contributors: Atsushi Watanabe, Florencia, Mikael Arguedas, Sean Yen, karina-ranadive, Yuki Furuta
+
 1.7.4 (2023-09-26)
 ------------------
 * Update python3 dependency.
-* Merge remote-tracking branch 'ros/noetic-devel'
-* Contributors: Farhan Mustar, Patrick Chin
+* Set ns as '~' when namespace is '~' (`#169 <https://github.com/ros/dynamic_reconfigure/issues/169>`_)
+* Support float('inf') for cfg file (`#168 <https://github.com/ros/dynamic_reconfigure/issues/168>`_)
+* Add BSD LICENSE file (`#193 <https://github.com/ros/dynamic_reconfigure/issues/193>`_)
+* Contributors: Farhan Mustar, Patrick Chin, Shane Loretz, Shingo Kitagawa
 
 1.7.3 (2022-05-05)
 ------------------
