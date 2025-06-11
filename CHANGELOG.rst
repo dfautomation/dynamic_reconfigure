@@ -2,6 +2,11 @@
 Changelog for package dynamic_reconfigure
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+1.7.7 (2025-06-11)
+------------------
+* Add end-of-life notice
+* Contributors: Shane Loretz
+
 1.7.6 (2025-05-20)
 ------------------
 * Revert "Fix unsafe yaml load on dynparam (`#202 <https://github.com/ros/dynamic_reconfigure/issues/202>`_)" (`#206 <https://github.com/ros/dynamic_reconfigure/issues/206>`_)
